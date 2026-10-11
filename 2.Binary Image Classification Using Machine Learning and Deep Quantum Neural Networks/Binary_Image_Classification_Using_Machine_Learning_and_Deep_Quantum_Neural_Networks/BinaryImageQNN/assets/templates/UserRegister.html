@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+
+<style>
+
+/* PAGE CENTER */
+
+.page-content{
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:80vh;
+padding:20px;
+}
+
+/* REGISTER CARD */
+
+.register-card{
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,0.3);
+padding:35px;
+border-radius:15px;
+width:420px;
+text-align:center;
+color:white;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* INPUT FIELDS */
+
+.register-card input,
+.register-card textarea{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:6px;
+outline:none;
+background:rgba(255,255,255,0.9);
+font-size:14px;
+}
+
+/* TEXTAREA */
+
+.register-card textarea{
+height:70px;
+resize:none;
+}
+
+/* BUTTON CONTAINER */
+
+.button-box{
+margin-top:15px;
+}
+
+/* REGISTER BUTTON */
+
+.btn-register{
+background:#007bff;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:6px;
+cursor:pointer;
+margin-right:10px;
+font-weight:bold;
+transition:0.3s;
+}
+
+/* RESET BUTTON */
+
+.btn-reset{
+background:#444;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
+
+/* BUTTON HOVER */
+
+.btn-register:hover{
+transform:scale(1.05);
+background:#0056b3;
+}
+
+.btn-reset:hover{
+transform:scale(1.05);
+background:#222;
+}
+
+/* MESSAGE BOX */
+
+.msg-success{
+color:#00ff9d;
+margin-bottom:12px;
+font-weight:bold;
+background:rgba(0,0,0,0.4);
+padding:8px;
+border-radius:6px;
+}
+
+.msg-error{
+color:#ff5c5c;
+margin-bottom:12px;
+font-weight:bold;
+background:rgba(0,0,0,0.4);
+padding:8px;
+border-radius:6px;
+}
+
+/* LOGIN LINK */
+
+.login-link{
+margin-top:15px;
+font-size:14px;
+}
+
+.login-link a{
+color:#00d4ff;
+text-decoration:none;
+font-weight:bold;
+}
+
+</style>
+
+
+<div class="page-content">
+
+<div class="register-card">
+
+<h2>User Registration</h2>
+
+<!-- SUCCESS / ERROR MESSAGE -->
+
+{% if msg %}
+
+<div class="msg-success">
+{{ msg }}
+</div>
+
+{% endif %}
+
+<form method="POST" action="{% url 'UserRegisterActions' %}">
+
+{% csrf_token %}
+
+<input type="text" name="name" placeholder="User Name" required>
+
+<input type="text" name="loginid" placeholder="Login ID" required>
+
+<input type="password" name="password" placeholder="Password" required>
+
+<input type="text" name="mobile" placeholder="Mobile Number"
+pattern="[0-9]{10}" title="Enter 10 digit mobile number">
+
+<input type="email" name="email" placeholder="Email Address">
+
+<input type="text" name="locality" placeholder="Locality">
+
+<textarea name="address" placeholder="Address"></textarea>
+
+<input type="text" name="city" placeholder="City">
+
+<input type="text" name="state" placeholder="State">
+
+<input type="hidden" name="status" value="activated">
+
+<div class="button-box">
+
+<button class="btn-register" type="submit">Register</button>
+
+<button class="btn-reset" type="reset">Reset</button>
+
+</div>
+
+</form>
+
+<!-- LOGIN PAGE LINK -->
+
+<div class="login-link">
+
+Already Registered?  
+<a href="{% url 'UserLogin' %}">Login Here</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

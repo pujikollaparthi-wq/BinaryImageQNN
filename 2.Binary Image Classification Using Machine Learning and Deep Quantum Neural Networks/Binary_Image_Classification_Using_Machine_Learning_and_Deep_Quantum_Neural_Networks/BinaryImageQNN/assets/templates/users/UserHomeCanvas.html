@@ -1,0 +1,207 @@
+{% extends 'users/userbase.html' %}
+{% block contents %}
+
+<section id="intro">
+
+<div class="intro-text">
+
+<h3 align="center" style="color:orange;">
+Welcome To User MNIST Canvas HomePage
+</h3>
+
+<center>
+
+<h2>
+<a href="#canvas_section"
+class="btn-get-started scrollto">
+Get Started
+</a>
+</h2>
+
+</center>
+
+</div>
+
+</section>
+
+
+<!-- MNIST CANVAS SECTION -->
+
+<section id="canvas_section">
+
+<center>
+
+<h2>Handwritten Digit Recognition</h2>
+
+<br>
+
+<canvas id="canvas" width="280" height="280"
+style="border:2px solid black;">
+</canvas>
+
+<br><br>
+
+<button onclick="clearCanvas()">Clear</button>
+
+<br><br>
+
+<label>Enter Actual Digit :</label>
+
+<input type="number" id="actual_digit" placeholder="Enter digit">
+
+<br><br>
+
+<button onclick="predictDigit()">Predict</button>
+
+<br><br>
+
+<h3 id="prediction"></h3>
+
+<h3 id="result"></h3>
+
+</center>
+
+</section>
+
+
+<script>
+
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+
+let drawing = false;
+
+/* INITIAL BLACK BACKGROUND */
+
+ctx.fillStyle = "black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+canvas.addEventListener("mousedown",startPosition);
+canvas.addEventListener("mouseup",endPosition);
+canvas.addEventListener("mousemove",draw);
+
+function startPosition(){
+drawing = true;
+}
+
+function endPosition(){
+drawing = false;
+ctx.beginPath();
+}
+
+function draw(e){
+
+if(!drawing) return;
+
+ctx.lineWidth = 18;
+ctx.lineCap = "round";
+ctx.strokeStyle = "white";
+
+ctx.lineTo(e.offsetX,e.offsetY);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(e.offsetX,e.offsetY);
+
+}
+
+
+/* CLEAR CANVAS */
+
+function clearCanvas(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="black";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+document.getElementById("prediction").innerHTML="";
+document.getElementById("result").innerHTML="";
+
+}
+
+
+/* CSRF TOKEN FUNCTION */
+
+function getCookie(name) {
+
+let cookieValue = null;
+
+if (document.cookie && document.cookie !== '') {
+
+let cookies = document.cookie.split(';');
+
+for (let i = 0; i < cookies.length; i++) {
+
+let cookie = cookies[i].trim();
+
+if (cookie.substring(0, name.length + 1) === (name + '=')) {
+
+cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+
+break;
+
+}
+
+}
+
+}
+
+return cookieValue;
+
+}
+
+const csrftoken = getCookie('csrftoken');
+
+
+/* PREDICTION FUNCTION */
+
+function predictDigit(){
+
+let actual = document.getElementById("actual_digit").value;
+
+if(actual==""){
+alert("Please enter actual digit");
+return;
+}
+
+let image = canvas.toDataURL("image/png");
+
+fetch("/MnistTorchQNN/",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"X-CSRFToken":csrftoken
+},
+
+body:JSON.stringify({
+image:image,
+actual:actual
+})
+
+})
+
+.then(response=>response.json())
+
+.then(data=>{
+
+document.getElementById("prediction").innerHTML =
+"Predicted Digit : " + data.prediction;
+
+document.getElementById("result").innerHTML =
+"Result : " + data.result;
+
+})
+
+.catch(error=>{
+console.log(error);
+alert("Prediction Error");
+});
+
+}
+
+</script>
+
+{% endblock %}

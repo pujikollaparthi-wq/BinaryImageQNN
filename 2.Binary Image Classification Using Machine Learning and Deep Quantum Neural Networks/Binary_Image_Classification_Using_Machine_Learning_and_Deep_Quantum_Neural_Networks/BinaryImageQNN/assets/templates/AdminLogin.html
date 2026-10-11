@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+
+<style>
+
+/* PAGE CENTER */
+
+.page-content{
+display:flex;
+justify-content:center;
+align-items:center;
+height:75vh;
+}
+
+
+/* GLASS LOGIN CARD */
+
+.admin-card{
+
+background: rgba(255,255,255,0.15);
+backdrop-filter: blur(15px);
+
+border:1px solid rgba(255,255,255,0.3);
+
+padding:40px;
+border-radius:15px;
+
+width:360px;
+
+text-align:center;
+color:white;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+
+}
+
+
+/* INPUT BOX */
+
+.admin-card input{
+
+width:100%;
+padding:12px;
+
+margin:10px 0;
+
+border:none;
+border-radius:6px;
+
+outline:none;
+
+}
+
+
+/* BUTTON */
+
+.btn-login{
+
+background:#007bff;
+color:white;
+
+border:none;
+padding:10px 20px;
+
+border-radius:6px;
+
+cursor:pointer;
+
+margin-right:10px;
+
+}
+
+.btn-reset{
+
+background:#555;
+color:white;
+
+border:none;
+
+padding:10px 20px;
+
+border-radius:6px;
+
+cursor:pointer;
+
+}
+
+.btn-login:hover{
+transform:scale(1.05);
+}
+
+
+/* MESSAGE */
+
+.message{
+margin-bottom:15px;
+font-weight:bold;
+color:yellow;
+}
+
+</style>
+
+
+<div class="page-content">
+
+<div class="admin-card">
+
+<h3>Admin Login Form</h3>
+
+<!-- DJANGO MESSAGES -->
+
+{% if messages %}
+{% for message in messages %}
+
+<div class="message">
+{{ message }}
+</div>
+
+{% endfor %}
+{% endif %}
+
+<form method="POST" action="{% url 'AdminLoginCheck' %}">
+
+{% csrf_token %}
+
+<input type="text" name="loginid" placeholder="Enter Admin ID" required>
+
+<input type="password" name="password" placeholder="Enter Password" required>
+
+<br><br>
+
+<button class="btn-login" type="submit">Login</button>
+
+<button class="btn-reset" type="reset">Reset</button>
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

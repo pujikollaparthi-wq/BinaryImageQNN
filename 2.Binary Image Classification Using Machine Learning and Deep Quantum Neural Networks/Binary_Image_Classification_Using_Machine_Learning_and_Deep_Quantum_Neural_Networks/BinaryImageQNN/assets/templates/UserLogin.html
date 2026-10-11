@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contents %}
+
+<style>
+
+/* CENTER POSITION */
+
+.page-content{
+display:flex;
+justify-content:center;
+align-items:flex-start;
+margin-top:40px;
+}
+
+/* GLASS LOGIN CARD */
+
+.login-card{
+background: rgba(255,255,255,0.15);
+backdrop-filter: blur(15px);
+border:1px solid rgba(255,255,255,0.3);
+padding:40px;
+border-radius:15px;
+width:350px;
+text-align:center;
+color:white;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* INPUT */
+
+.login-card input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:6px;
+outline:none;
+}
+
+/* BUTTONS */
+
+.btn-login{
+background:#007bff;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:6px;
+cursor:pointer;
+margin-right:10px;
+}
+
+.btn-reset{
+background:#555;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:6px;
+cursor:pointer;
+}
+
+</style>
+
+
+<div class="page-content">
+
+<div class="login-card">
+
+<h3>User Login Form</h3>
+
+<form method="POST" action="{% url 'UserLoginCheck' %}">
+
+{% csrf_token %}
+
+<input type="text" name="loginid" placeholder="Enter Login Id" required>
+
+<input type="password" name="password" placeholder="Enter Password" required>
+
+<br><br>
+
+<button class="btn-login" type="submit">Login</button>
+<button class="btn-reset" type="reset">Reset</button>
+
+</form>
+
+{% for message in messages %}
+<p style="color:red">{{message}}</p>
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}
